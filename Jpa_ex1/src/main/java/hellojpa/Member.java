@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+
 @Getter
 @Setter
 @Entity
@@ -17,11 +18,22 @@ public class Member {
 
     @Id  //PK매핑
     @GeneratedValue//AUTO_INCREMENT
+    @Column(name = "MEMBER_ID")
     private Long id;
-    @Column(name="name") // DB의 컬럼명, 자바에서의 변수명 다를경우  Column(name)으로 DB컬럼 명 지정 가능함
-    private String name;
+    
+    @Column(name="USERNAME") // DB의 컬럼명, 자바에서의 변수명 다를경우  Column(name)으로 DB컬럼 명 지정 가능함
+    private String username;
 
-    private Integer age;
+    @ManyToOne //Member입장에서 N  TEAM입장에서 1
+    @JoinColumn(name = "TEAM_ID") //어떤 값으로 조인할 것인지
+    private Team team;
+
+
+
+
+    //외래키 값을 테이블에 맞춰 그대로 가져옴 객체지향적이지 않음
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
 
 
 
