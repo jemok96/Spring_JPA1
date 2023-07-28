@@ -20,7 +20,7 @@ public class Member {
     @GeneratedValue//AUTO_INCREMENT
     @Column(name = "MEMBER_ID")
     private Long id;
-    
+
     @Column(name="USERNAME") // DB의 컬럼명, 자바에서의 변수명 다를경우  Column(name)으로 DB컬럼 명 지정 가능함
     private String username;
 

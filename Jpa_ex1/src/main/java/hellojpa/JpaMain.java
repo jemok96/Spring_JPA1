@@ -24,13 +24,21 @@ public class JpaMain {
             member.setTeam(team); //연관관계 설정, 참조 저장
             em.persist(member);
 
-            em.flush();
-            em.clear();
+
+//            em.flush();
+//            em.clear();
             //조회
             Member findMember = em.find(Member.class, member.getId());
             Team findTeam = findMember.getTeam();
 
-            System.out.println("findTeam = " + findTeam.getName());
+            Team team1 = em.find(Team.class, team.getId());
+            List<Member> members1= team1.getMembers();
+            System.out.println("============================");
+            for (Member m: members1) {
+                System.out.println(m.getUsername());
+            }
+            System.out.println("============================");
+
 
             List<Member> members = findTeam.getMembers();
             for (Member m: members) {
