@@ -1,0 +1,55 @@
+-Class
+@Entity: class에 붙이면 JPA가 관리할 객체
+ - 기본생성자 필수
+ - final 클래스,enum,interface,inner클래스 사용X
+ - 저장할 필드에 final 사용 X
+
+@Table : 엔티티와 매핑할 테이블 지정
+ ex) @Table(name="MBR") => select * from MEB
+
+-Field
+@Id: 데이터베이스 PK와 매핑
+
+@Column(name ="")
+  name : 필드와 매핑할 테이블의 컬럼 이름
+  unique(field에 쓰지말고 Table에 써야할 것같음) , length, nullable,
+  columnDefinition , ex)varchar(100) default ‘EMPTY'
+
+@Enumerated(EnumType.STRING)
+ - enum타입 쓰고 싶을경우
+ - EnumType.ORINAL 사용X 0,1.. 순서가 저장되는데 enum값 맨앞에 다른 값이 추가된다면?? 다 엉킴
+
+@Temporal(TemporalType.TIMESTAMP) : 날짜 매핑
+ • TemporalType.DATE: 날짜, 데이터베이스 date 타입과 매핑
+   (예: 2013–10–11)
+ • TemporalType.TIME: 시간, 데이터베이스 time 타입과 매핑
+   (예: 11:11:11)
+ • TemporalType.TIMESTAMP: 날짜와 시간, 데이터베이 스
+    timestamp 타입과 매핑(예: 2013–10–11 11:11:11)
+ 이거 말고 그냥 최신버전에서는
+ private LocalDate(LocalDateTime) regDate;      이런식으로 쓰면 됨 자동으로 생성해줌
+
+
+@LOB
+ - BLOB, CLOB 매핑
+ - 문자열(String,char[])이면 CLOB
+ - 나머지는 BLOB
+
+@Transient
+ • 특정 필드를 컬럼에 매핑하지 않음(필드 매핑X)
+ • 데이터베이스에 저장X, 조회X
+ • 주로 메모리상에서만 임시로 어떤 값을 보관하고 싶을 때 사용
+ @Transient
+ private Integer temp;
+
+
+
+
+
+hibernate.hbm2ddl.auto
+  옵션
+- create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)   운영서버X
+- create-drop : create와 같으나 종료시점에 테이블 DROP 운영서버X
+- update : 변경분만 반영(운영DB에는 사용하면 안됨)      운영서버X
+- validate : 엔티티와 테이블이 정상 매핑되었는지만 확인
+- none : 사용하지 않음
