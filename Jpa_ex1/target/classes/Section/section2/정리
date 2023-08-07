@@ -1,0 +1,21 @@
+JPA 구동방식
+
+1. Persistence.xml의 설정 정보 조회
+2. EntityManagerFactory 생성
+3. EntityManager 생성
+JPA는 모든 데이터 변경은 Transaction안에서 실행
+
+EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");   //하나로 애플리케이션 전체 공유
+EntityManager em = emf.createEntityManager(); // 쓰레드간에 공유 X (사용하고 버려야함)
+고객의 요청마다 Manager생성하고 커넥션풀사용해서 DB 사용
+
+EntityTransaction tx = em.getTransaction();
+https://perfectacle.github.io/2021/05/24/entity-manager-lifecycle/  생성 이슈
+
+저장 : em.persist(Object)
+찾기 : em.find(~.class,pk)
+삭제 : em.remove(Obejct)
+수정 : Member findMember = em.find(Member.class,1L);
+      findMember.setName("Change")
+자세한 쿼리는 다른 방법이 필요함
+

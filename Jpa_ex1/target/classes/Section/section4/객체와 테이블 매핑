@@ -1,0 +1,27 @@
+
+@Entity: class에 붙이면 JPA가 관리할 객체
+ - 기본생성자 필수
+ - final 클래스,enum,interface,inner클래스 사용X
+ - 저장할 필드에 final 사용 X
+
+@Table : 엔티티와 매핑할 테이블 지정
+ ex) @Table(name="MBR") => select * from MEB
+
+
+
+@Id: 데이터베이스 PK와 매핑
+
+@Column : 쿼리가 나갈 때 name에 지정된 값으로 column 쿼리를 보냄
+
+
+
+
+
+
+hibernate.hbm2ddl.auto
+  옵션
+- create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)
+- create-drop : create와 같으나 종료시점에 테이블 DROP
+- update : 변경분만 반영(운영DB에는 사용하면 안됨)
+- validate : 엔티티와 테이블이 정상 매핑되었는지만 확인
+- none : 사용하지 않음
