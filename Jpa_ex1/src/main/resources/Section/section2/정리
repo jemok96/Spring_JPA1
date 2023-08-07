@@ -19,3 +19,7 @@ https://perfectacle.github.io/2021/05/24/entity-manager-lifecycle/  생성 이�
       findMember.setName("Change")
 자세한 쿼리는 다른 방법이 필요함
 
+<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+데이터베이스 방언   H2Dialect, Oracle12cDialet,MySQL8Dialect 등..
+설정에 따라 문법과 타입을 알아서 처리해주므로 개발자는 DB를바꾸더라도 코드를 크게 바꾸지 않게 됨
+대단하구만
