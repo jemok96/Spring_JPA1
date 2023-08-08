@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -15,16 +12,22 @@ import javax.persistence.Id;
 @ToString
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
-    private String name;
 
+    @Column(name = "USERNAME")
+    private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
 
     public Member() {
     }
 
-    public Member(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+
 }
