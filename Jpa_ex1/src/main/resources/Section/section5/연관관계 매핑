@@ -21,7 +21,7 @@ private Long id;
  Long findTeamId = findMember.getTeamId();
  Team findTeam = em.find(Team.class, findTeamId);
 
- 어떤 Member의 팀 정보를 가져오려면 이 만큼이나 계속 찾아야함
+
  테이블은 외래 키로 조인을 사용해서 연관된 테이블을 찾는다
  객체는 참조를 사용해서 연관된 객체를 찾음       둘 사이에는 큰 간격이 있음
 

@@ -16,18 +16,32 @@ private Long id;
  member.setTeamId(team.getId());
  em.persist(member);
 
+//식별자를 찾아서 다시 조회, 객체 지향적인 방법은 아니다.
  Member findMember = em.find(Member.class, member.getId());
  Long findTeamId = findMember.getTeamId();
  Team findTeam = em.find(Team.class, findTeamId);
 
- 어떤 Member의 팀 정보를 가져오려면 이 만큼이나 계속 찾아야함
+
  테이블은 외래 키로 조인을 사용해서 연관된 테이블을 찾는다
  객체는 참조를 사용해서 연관된 객체를 찾음       둘 사이에는 큰 간격이 있음
 
 
 
+@ManyToOne
+@JoinColumn(name = "TEAM_ID")
+private Team team;
 
+Team team = new Team();
+team.setName("TeamA");
+em.persist(team);
 
- 양방향 관계일 경우
- 외래키를 가지고 있는 쪽을 주인으로 정해라
- 주인이 아닌곳은 mappedBy로 지정, 주인이 아닌쪽은 읽기만 가능
+Member member = new Member();
+member.setUsername("member1");
+member.setTeam(team);
+em.persist(member);
+
+//참조를 사용해서 연관관계 조회(객체 지향적인 방법이다.)
+Member findMember = em.find(Member.class, member.getId());
+Team findTeam = findMember.getTeam();
+====================== 외래키로했을 경우, 참조로 했을 경우 find,update 테스트좀 해보기===================
+
