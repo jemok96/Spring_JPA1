@@ -1,0 +1,21 @@
+@MappedSuperclass
+공통 매핑 정보가 필요할 때 사용
+if 모든 테이블에 등록날짜(reDate),수정날짜(upDate) 이런 속성이 모두 필요하다고 가정할 때
+=> 공통 속성이 필요할 경우
+
+@MappedSuperClass
+class BaseEntity{
+
+    private LocalDateTime regDate;
+    @Column(name="up_date")
+    private LocalDateTime upDate;
+}
+클래스로 나눠주고 @MappedSuperClass 선언한 후  => @MappedSupperClass 선언안하면 DB에 속성들 생기지 않음
+사용할 클래스에서 extends해주면 됨
+근데 interface로하면 안되는 듯?
+
+상속관계 매핑X
+• 엔티티X, 테이블과 매핑X
+• 부모 클래스를 상속 받는 자식 클래스에 매핑 정보만 제공
+• 조회, 검색 불가(em.find(BaseEntity) 불가)  => 이렇게 검색할 일이 있나..?
+• 직접 생성해서 사용할 일이 없으므로 추상 클래스 권장
