@@ -18,6 +18,10 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "DELIBERY_ID")
+    private Delivery delivery;
+
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
