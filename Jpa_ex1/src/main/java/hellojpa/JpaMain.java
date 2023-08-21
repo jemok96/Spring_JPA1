@@ -16,17 +16,24 @@ public class JpaMain {
 
         tx.begin();
         try{
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-            Movie movie = new Movie();
-            movie.setDirector("a");
-            movie.setActor("bbb");
-            movie.setName("바람과함꼐 사라지다");
-            movie.setPrice(10000);
-            em.persist(movie);
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setTeam(team);
+            em.persist(member);
 
+            em.flush();
+            em.clear();
 
+            Member m = em.find(Member.class, member.getId());
+            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
 
-
+            System.out.println(" = =================" );
+            m.getTeam().getName();
+            System.out.println(" = =================" );
             tx.commit();
 
         }

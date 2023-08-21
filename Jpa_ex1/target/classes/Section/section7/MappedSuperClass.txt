@@ -10,7 +10,7 @@ class BaseEntity{
     @Column(name="up_date")
     private LocalDateTime upDate;
 }
-클래스로 나눠주고 @MappedSuperClass 선언한 후
+클래스로 나눠주고 @MappedSuperClass 선언한 후  => @MappedSupperClass 선언안하면 DB에 속성들 생기지 않음
 사용할 클래스에서 extends해주면 됨
 근데 interface로하면 안되는 듯?
 
