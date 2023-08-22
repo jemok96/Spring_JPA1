@@ -1,0 +1,38 @@
+Member를 조회할 때 Team도 함께 조회해야 할까?
+
+em.find() vs em.getReference()
+• em.find(): 데이터베이스를 통해서 실제 엔티티 객체 조회
+• em.getReference(): 데이터베이스 조회를 미루는 가짜(프록시)엔티티 객체 조회
+
+Member findMember = em.getReference(Member.class, member.getId());  여기서 DB조회X
+System.out.println("id = " + findMember.getId()); 실제로 사용할 떄 DB를 조회함
+
+프록시
+• 프록시 객체는 실제 객체의 참조(target)를 보관
+• 프록시 객체를 호출하면 프록시 객체는 실제 객체의 메소드 호출
+• 프록시 객체는 처음 사용할 때 한 번만 초기화
+• 프록시 객체를 초기화 할 때, 프록시 객체가 실제 엔티티로 바뀌는 것은 아님, 초기화되면 프록시 객체를 통해서 실제 엔티티에 접근 가능
+• 프록시 객체는 원본 엔티티를 상속받음, 따라서 타입 체크시 주의해야함 (== 비교 실패, 대신 instance of 사용)
+• 영속성 컨텍스트에 찾는 엔티티가 이미 있으면 em.getReference()를 호출해도 실제 엔티티 반환
+• 영속성 컨텍스트의 도움을 받을 수 없는 준영속 상태일 때, 프록시를 초기화하면문제 발생
+(하이버네이트는 org.hibernate.LazyInitializationException 예외를 터트림)
+
+
+지연 로딩으로 셋팅
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "TEAM_ID")
+private Team team;
+
+m.getTeam().getName(); // 실제 team을 사용하는 시점에 초기화(DB)조회
+
+즉시 로딩 EAGER를 사용해서 함께 조회
+@ManyToOne(fetch = FetchType.EAGER)
+Member를사용할 때 Team을 같이 조회해야할 경우 많이 사용
+
+하지만 가급적 지연 로딩만 사용해라(특히 실무에서)
+즉시 로딩시 예상하지 못한 SQL이 발생, JPQL에서 N+1문제를 일으킨다
+=> fetch join등 다양하게 해결방법이 있음
+N+1 : 쿼리 하나를 날렸을 경우 추가적으로 N개를 조회?
+
+@ManyToOne , @OneToOne은 기본이 즉시로딩이므로  지연로딩으로 설정해줘야함
+**** 모든 연관관계에 지연 로딩을 사용해라 **********

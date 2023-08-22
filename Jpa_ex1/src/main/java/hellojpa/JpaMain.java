@@ -4,8 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.transaction.TransactionManager;
-import java.util.List;
+
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -17,14 +16,14 @@ public class JpaMain {
         tx.begin();
         try{
 
-            Child child = new Child();
-            Child child1 = new Child();
 
-            Parent parent = new Parent();
-            parent.addChild(child);
-            parent.addChild(child1);
+            Address address = new Address("city", "street", "10000");
 
-            em.persist(parent);
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setHomeAddress(address);
+            em.persist(member);
+
 
 
             tx.commit();
