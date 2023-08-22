@@ -1,6 +1,5 @@
 package hellojpa;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,7 +26,9 @@ public class Member {
     @Embedded
     private Period workPeriod;
     @Embedded
-    private Address homeAddress;
+    private Address honeAddress;
+
+
 
 
     public void changeTeam(Team team){
@@ -37,12 +38,5 @@ public class Member {
     public Member() {
     }
 
-    @Builder
-    public Member(Long id, String username, Team team, Period workPeriod, Address homeAddress) {
-        this.id = id;
-        this.username = username;
-        this.team = team;
-        this.workPeriod = workPeriod;
-        this.homeAddress = homeAddress;
-    }
+
 }

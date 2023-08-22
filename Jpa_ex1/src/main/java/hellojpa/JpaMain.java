@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 
 public class JpaMain {
@@ -16,15 +17,14 @@ public class JpaMain {
         tx.begin();
         try{
 
-
-            Address address = new Address("city", "street", "10000");
-
             Member member = new Member();
-            member.setUsername("member1");
-            member.setHomeAddress(address);
+            member.setUsername("Jemok");
             em.persist(member);
 
 
+
+            List<Member> resultList = em.createNativeQuery("select * from Member").getResultList();
+            System.out.println("resultList = " + resultList);
 
             tx.commit();
 
