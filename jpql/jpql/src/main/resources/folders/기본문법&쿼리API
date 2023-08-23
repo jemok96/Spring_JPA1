@@ -1,0 +1,25 @@
+@JoinColumn() name 속성 :대상 엔티티와 “매핑할 외래 키(자기 필드명)” 이름을 지정해주는 값
+ 즉 Order 테이블에서 PRODUCT_ID를 외래키 값으로 사용할 것이다.
+ referencedColumnName 속성 : 조인할 컬럼명(외래 키가 참조하는 대상 테이블의 컬럼명)”을 지정
+ default값이 참조하는 대상 테이블의 기본키 변수명으로 알아서 조인됨
+
+TypeQuery : 반환 타입이 명확할 때 사용
+Query : 반환 타입이 명확하지 않을 때 사용
+
+Query query1 = em.createQuery("select m.username,m.age FROM Member m");
+TypedQuery<Member> query2 = em.createQuery("select m From Member m", Member.class); , 뒤에 클랙스를 명확하게 명시할 수 있을경우
+TypedQuery<String> query3 = em.createQuery("select m.username From Member m", String.class);
+
+query.getResultList(): 결과가 하나 이상일 때,
+• 리스트 반환 결과가 없으면 빈 리스트 반환
+query.getSingleResult(): 결과가 정확히 하나, 단일 객체 반환
+• 결과가 없으면: javax.persistence.NoResultException
+• 둘 이상이면: javax.persistence.NonUniqueResultException
+
+
+
+파라미터 바인딩 - 이름 기준, 위치 기준
+ex)
+Member singleResult = em.createQuery("select m from Member m where m.username = :username ", Member.class)
+                    .setParameter("username", "Jemok")
+                    .getSingleResult();
