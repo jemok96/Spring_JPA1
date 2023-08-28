@@ -4,15 +4,15 @@ import jpabook.jpashop.domain.item.Item;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class ItemRepository {
-    private final EntityManager em;
+    @PersistenceContext
+    private EntityManager em;
 
-    public ItemRepository(EntityManager em) {
-        this.em = em;
-    }
+
     public void save(Item item){
         if(item.getId() == null){
             em.persist(item);
