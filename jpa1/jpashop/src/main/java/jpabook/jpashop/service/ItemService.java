@@ -1,5 +1,6 @@
 package jpabook.jpashop.service;
 
+import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,15 @@ public class ItemService {
     @Transactional
     public void saveItem(Item item){
         itemRepository.save(item);
+    }
+    @Transactional
+    public void updateItem(Long itemId,UpdateItemDto dto){
+        Item findItem = itemRepository.findOne(itemId);
+        findItem.setName(dto.getName());
+        findItem.setPrice(dto.getPrice());
+        findItem.setStockQuantity(dto.getStockQuantity());
+        //setter보다는 change같은 메서드를 생성해서 변경해라!  어디서 변경점이 일어난지 찾기 어려울 수 있음
+
     }
 
     public List<Item> findItems(){
