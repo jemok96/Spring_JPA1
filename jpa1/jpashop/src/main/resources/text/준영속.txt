@@ -1,0 +1,44 @@
+//영속상태
+Book book = em.find(Book.class, 1L);
+book.setName("asda"); // 영속상태일 경우에 변경감지를 통해서 자동으로 DB에 업데이트를함
+
+
+//준영속 상태
+Book 객체는 이미 DB에 한번 저장되어서 식별자가 존재한다.
+이렇게 임의로 만들어낸 엔티티도 기존 식별자를 가지고 있으면
+준영속 엔티티로 볼 수 있다.)
+
+@PostMapping("items/{itemId}/edit")
+public String updateItem(@PathVariable("itemId")Long itemId,@ModelAttribute("form")BookForm form) {
+     Book book = new Book();
+     book.setIsbn(form.getIsbn());
+     book.setName(form.getName());
+     book.setPrice(form.getPrice());       => 여기서 만약에 Price는 가격이 변하지 않는다는가정하에 Price값을 set하지 않으면 merge시 null값으로 업데이트 될 수도 있음
+     book.setStockQuantity(form.getStockQuantity());
+     book.setAuthor(form.getAuthor());
+     book.setId(form.getId());
+
+    => 근데 이런 set보다는 change와 같이 의미있는 메서드를 사용해야함
+     itemService.saveItem(book);
+     return "redirect:/items";}
+
+준영속 엔티티를 수정하는 2가지 방법   => 영속성 컨텍스트에서 관리되는 것이 아님
+변경 감지 기능 사용
+병합( merge ) 사용
+
+
+1. 변경감지
+@Transactional
+    public void updateItem(Long itemId, Book param){
+        Item findItem = itemRepository.findOne(itemId);
+        findItem.setName(param.getName());
+        findItem.setPrice(param.getPrice());
+        findItem.setStockQuantity(param.getStockQuantity());}
+
+주의: 변경 감지 기능을 사용하면 원하는 속성만 선택해서 변경할 수 있지만, 병합을 사용하면 모든 속성이
+변경된다. 병합시 값이 없으면 null 로 업데이트 할 위험도 있다. (병합은 모든 필드를 교체한다.)
+=> merge보다는 변경 감지사용
+
+Controller계층에서 어설프게 Entity생성해서 사용하지마라, dto로 변환해서 보내든지 파라미터를 보내라
+트랜잭션이 있는 service계층에서 영속 상태의 엔티티를 조회하고, 엔티티의 데이터를 직접 변경
+트랜잭션범위 내에서 영속성을 다루는게 중요함
