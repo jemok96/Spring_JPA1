@@ -19,8 +19,10 @@
 
 @Column(name ="")
   name : 필드와 매핑할 테이블의 컬럼 이름
-  unique(field에 쓰지말고 Table에 써야할 것같음) , length, nullable,
-  columnDefinition , ex)varchar(100) default ‘EMPTY'
+  unique(field에 쓰지말고 Table에 써야함 이름이 랜덤값으로 알아볼 수없는 값으로 생성됨)
+  length : 길이 지정
+  columnDefinition , ex) columnDefinition = "varchar(100) default 'EMPTY'"
+  nullable = false : not null 조건 추가
 
 @Enumerated(EnumType.STRING)
  - enum타입 쓰고 싶을경우
@@ -57,6 +59,6 @@ hibernate.hbm2ddl.auto
   옵션
 - create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)   운영서버X
 - create-drop : create와 같으나 종료시점에 테이블 DROP 운영서버X
-- update : 변경분만 반영(운영DB에는 사용하면 안됨)      운영서버X
-- validate : 엔티티와 테이블이 정상 매핑되었는지만 확인
-- none : 사용하지 않음
+- update : 변경분만 반영(운영DB에는 사용하면 안됨)      운영서버X, 테스트서버
+- validate : 엔티티와 테이블이 정상 매핑되었는지만 확인   테스트서버,운영서버
+- none : 사용하지 않음      테스트서버,운영서버

@@ -1,5 +1,5 @@
-[1차 캐시]
-1.
+
+1.[1차 캐시]
 Member member = new Member();
 member.setId(1L);member.setName("jemok");
 em.persist(member); // 여기서 영속성 컨텍스트에 저장 됨 DB에 쿼리문을 보낸게 아님
@@ -9,13 +9,13 @@ System.out.println("findMember = " + findMember);
 System.out.println(" ======== ");
 tx.commit(); // 이 때 insert(persist)쿼리문 날라감
 
-2.
+2.[동일성보장]
 1L pk값을 가진 객체가 db에 존재중
 Member findMember1 = em.find(Member.class, 1L); //영속성 컨텍스트에 존재하지 않기 때문에 DB조회해서 컨텍스트에 저장 쿼리문 날라감
 Member findMember2 = em.find(Member.class, 1L); // 동일한값 또 가져오기 때문에 컨텍스트에서 조회 , DB조회 X
 System.out.println(findMember1==findMember2); 동일성 보장, 동일 트랜잭션 내에서
 
-[쓰기 지연]
+3.[쓰기 지연]
 Member member1 = new Member(2L,"a");
 Member member2 = new Member(3L,"b");
 
@@ -23,11 +23,17 @@ em.persist(member1);
 em.persist(member2); // 영속성 컨텍스트와 쓰기 지연 SQL에 쌓여있는 상황
 tx.commit(); 한번에 쿼리 보냄
 
-[변경 감지]
+4.[변경 감지] dirty checking
 ember findMember = em.find(Member.class, 2L);
 findMember.setName("changeName");
 tx.commit();
 자바의 컬렉션 즉, 객체 지향과 비슷하다. update문을 날리지 않아도 찾은 후 값변경하면 값이 변경됨
+1.commit()시 flush실행
+2.엔티티와 스냅샷 비교,  1차 캐시모습과 commit()시 비교해서 변경점 확인
+3.UPDATE SQL 생성
+4.flush
+5.commit()
+
 
 [flush]
 영속성 컨텍스트의 변경내용을 데이터베이스에 반영
@@ -38,3 +44,7 @@ tx.commit();
 • 트랜잭션 커밋 - 플러시 자동 호출
 • JPQL 쿼리 실행 - 플러시 자동 호출
 • 영속성 컨텍텍스트를 비우지 않는다.데이터 베이스에 동기화 하는 것이다.
+
+
+동일성 비교: ==. 객체 인스턴스의 주소 값을 비교한다.
+동등성 비교. equals(). 객체 내부의 값을 비교한다
