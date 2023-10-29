@@ -1,4 +1,4 @@
--Class
+[Class]
 @Entity: class에 붙이면 JPA가 관리할 객체
  - 기본생성자 필수
  - final 클래스,enum,interface,inner클래스 사용X
@@ -7,10 +7,10 @@
 @Table : 엔티티와 매핑할 테이블 지정
  ex) @Table(name="MBR") => select * from MEB
 
--Field
+[Field]
 @Id: 데이터베이스 PK와 매핑   , 직접 할당할 경우 @ID만사용하고 자동생성할 경우 @Id +@GeneratedValue
-@GeneratedValue :자동 생성
- •  IDENTITY: 데이터베이스에 위임, MYSQL
+@GeneratedValue :자동 생 성
+ • IDENTITY: 데이터베이스에 위임, MYSQL
  • SEQUENCE: 데이터베이스 시퀀스 오브젝트 사용, ORACLE
     • @SequenceGenerator 필요
  • TABLE: 키 생성용 테이블 사용, 모든 DB에서 사용
@@ -21,8 +21,11 @@
   name : 필드와 매핑할 테이블의 컬럼 이름
   unique(field에 쓰지말고 Table에 써야함 이름이 랜덤값으로 알아볼 수없는 값으로 생성됨)
   length : 길이 지정
-  columnDefinition , ex) columnDefinition = "varchar(100) default 'EMPTY'"
+  columnDefinition , ex) columnDefinition = "varchar(100) default 'EMPTY'" 정의를 직접
   nullable = false : not null 조건 추가
+  insertable,updatable : 필드 값 수정시 DB에 반영할 지 여부
+  @Column(updatable=false)지정 시 해당 필드의 값이 변경되도 UPDATE문에 포함X
+  기본값:true
 
 @Enumerated(EnumType.STRING)
  - enum타입 쓰고 싶을경우
@@ -33,11 +36,11 @@
    (예: 2013–10–11)
  • TemporalType.TIME: 시간, 데이터베이스 time 타입과 매핑
    (예: 11:11:11)
- • TemporalType.TIMESTAMP: 날짜와 시간, 데이터베이 스
+ • TemporalType.TIMESTAMP: 날짜와 시간, 데이터베이스
     timestamp 타입과 매핑(예: 2013–10–11 11:11:11)
- 이거 말고 그냥 최신버전에서는
- private LocalDate(LocalDateTime) regDate;      이런식으로 쓰면 됨 자동으로 생성해줌
-
+ 이거 말고 그냥 최신버전에서는 이런식으로 쓰면 됨 자동으로 생성해줌
+ private LocalDate(LocalDateTime) regDate; // 2019-11-13
+ private LocalDateTime dateTime; //2019-11-12T16:34:30.388
 
 @LOB
  - BLOB, CLOB 매핑
@@ -52,9 +55,6 @@
  private Integer temp;
 
 
-
-
-
 hibernate.hbm2ddl.auto
   옵션
 - create : 기존테이블 삭제 후 다시 생성 (DROP + CREATE)   운영서버X
@@ -62,3 +62,4 @@ hibernate.hbm2ddl.auto
 - update : 변경분만 반영(운영DB에는 사용하면 안됨)      운영서버X, 테스트서버
 - validate : 엔티티와 테이블이 정상 매핑되었는지만 확인   테스트서버,운영서버
 - none : 사용하지 않음      테스트서버,운영서버
+
