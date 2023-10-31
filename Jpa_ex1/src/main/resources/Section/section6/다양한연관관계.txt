@@ -3,15 +3,15 @@
 다대일 vs 일대다
 
 
-N:1(다대일)
-데이터베이스의 구조에서도 외래키가 N쪽에 있고, Entity모델에서도 N쪽에 외래키값 @JoinColumn을 지정하는
-가장 이상적인 구조
+[N:1(다대일)]
+데이터베이스의 구조에서도 외래키가 N쪽에 있고, Entity모델에서도 N쪽에 외래키값 @JoinColumn을 지정
+하고 반대쪽에 OneToMany(mappedby="") 가장 이상적인 구조
 
-1:N(일대다)
+[1:N(일대다)]
 데이터베이스 구조에서는 외래키가 N쪽에 있지만, Entity모델에서는 1쪽이 연관관계의 주인으로, 외래키를 관리해줘야함
 즉 Team과 Member가 있을 때  Team과 Member는 DB에서는 Member(N)쪽에 외래키가 있고
 Entity모델에서도 Member를 연관관계를 주인으로 지정해야하지만
-1:N관계에서는 Entity모델에서 Team쪽을 연관관계의 주인 즉,@JoinColumn을 지정해줘야함
+1:N관계에서는 Entity모델에서 Team(연관관계 주인)에 @JoinColumn을 지정해줘야함
 ==> Team에서 Member를 알고싶은데 Member쪽에서는 Team을 알고싶지 않을 경우??
 물론 양방향 걸 수 있는데 공식적으로 존재하지 않는 방식
 
@@ -20,6 +20,54 @@ Entity모델에서도 Member를 연관관계를 주인으로 지정해야하지�
 • 연관관계 관리를 위해 추가로 UPDATE SQL 실행
 • 객체와 테이블의 차이 때문에 반대편 테이블의 외래 키를 관리하는 특이한 구조
 • @JoinColumn을 꼭 사용해야 함. 그렇지 않으면 조인 테이블 방식을 사용함(중간에 테이블을 하나 추가함)
+ex)
+@OneToMany
+@JoinColumn(name = "TEAM_ID")
+private List<Member> members = new ArrayList<>();
+
+Member member = new Member();
+member.setUsername("member1");
+em.persist(member);
+
+Team team = new Team();
+team.setName("teamA");
+team.getMembers().add(member);
+em.persist(team);
+==> update문이 하나 더 날라감
 
 ★★★★★★★★★★
 일대다 단방향 매핑보다는 다대일 양방향 매핑을 사용하자
+
+
+[일대일]
+다대일과 비슷함
+주 테이블이나 대상 테이블 중에 외래 키 선택 가능 (ex 게시판과 첨부파일 )
+주 테이블은 쉽게 생각해서 많이 조회하는 테이블이라고 생각
+• 주 테이블에 외래 키
+• 대상 테이블에 외래 키
+• 외래 키에 데이터베이스 유니크(UNI) 제약조건 추가
+
+DB에서 FK,UNI를 가지고 있는 테이블이 Member Table일 경우
+주 테이블 (Member table 연관관계의 주인, 이 상태로 단방향은 끝임)
+@OneToOne
+@JoinColumn(name = "LOCKER_ID")
+private Locker locker;
+
+대상 테이블 (Team table, 양방향 관계까지 설정할 경우)
+@OneToOne(mappedBy = "locker")
+private Member member;
+
+• 주 테이블에 외래 키
+    • 주 객체가 대상 객체의 참조를 가지는 것 처럼 주 테이블에 외래 키를 두고 대상 테이블을 찾음
+    • 객체지향 개발자 선호
+    • JPA 매핑 편리
+    • 장점: 주 테이블만 조회해도 대상 테이블에 데이터가 있는지 확인 가능
+    • 단점: 값이 없으면 외래 키에 null 허용
+• 대상 테이블에 외래 키
+    • 대상 테이블에 외래 키가 존재
+    • 전통적인 데이터베이스 개발자 선호
+    • 장점: 주 테이블과 대상 테이블을 일대일에서 일대다 관계로 변경할 때 테이블 구조 유지
+    • 단점: 프록시 기능의 한계로 지연 로딩으로 설정해도 항상 즉시 로딩됨
+
+[다대다]
+사용X, 다대다 관계는 정규화로 풀어내서 사용하자
