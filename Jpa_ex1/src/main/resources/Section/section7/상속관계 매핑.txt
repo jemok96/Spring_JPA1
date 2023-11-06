@@ -5,6 +5,8 @@
 만약 Item이라는 table이 있는데 이 Item 테이블에 모든 정보를 다 담아둘 것이냐
 아니면 Movie,Album등 카테고리를 나눠서 공통된 부분은 Item으로 추상화 할 것이냐에따라 방식이 달라짐
 
+상속관계 매핑은 @Entity를 붙임
+
 1.조인 전략
 Item을 상위클래스로 공통된 속성을 뽑아낸 후
 Movice,Book,Album을 하위 클래스로 정한다.
@@ -13,9 +15,8 @@ Movice,Book,Album을 하위 클래스로 정한다.
 @DiscriminatorColumn(name=“DTYPE”)  => 상위 클래스에 지정해주면 insert시에 어떤 타입이 저장된지 알 수 있다 ex)Movie,Book
 @DiscriminatorValue(“XXX”)    => 기본값은 entity명이 들어가는데 값을 바꾸고 싶다면 value를 지정
 장점
-• 테이블 정규화
+• 테이블 정규화,저장공간 효율화
 • 외래 키 참조 무결성 제약조건 활용가능
-• 저장공간 효율화
 단점
 • 조회시 조인을 많이 사용, 성능 저하   => 별 단점은 아닌듯..
 • 조회 쿼리가 복잡함
@@ -24,14 +25,30 @@ Movice,Book,Album을 하위 클래스로 정한다.
 
 
 2. 싱글 테이블 전략
-Item에 모든 속성을 몰아 넣는 전략
+Item에 모든 속성을 몰아 넣는 전략.  Item객체에 Book,Movie,Album의 멤버가 다 들어가있음,
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 장점
 • 조인이 필요 없으므로 일반적으로 조회 성능이 빠름
 • 조회 쿼리가 단순함
 단점
 • 자식 엔티티가 매핑한 컬럼은 모두 null 허용 => 데이터 무결성 문제
+ ex) 만약에 Book값을 넣었을 때 다른 Movie,Album은 null이들어감
 • 단일 테이블에 모든 것을 저장하므로 테이블이 커질 수 있다. 상황에 따라서 조회 성능이 오히려 느려질 수 있다
 
-3. 구현 클래스마다 테이블 전략
-=> 이 전략은 DB설계자와 ORM전문가 둘 다 추천X => 사용하지말자
+
+3. 구현 클래스마다 테이블 전략 =>   사용하지말자
+• 이 전략은 DB설계자와 ORM전문가 둘 다 추천X => 데이터 삽입은 괜찮은데 조회시 너무 복잡한 쿼리 발생
+Item 타입으로 찾을 경우
+Movie movie = new Movie();
+movie.setName("zzz");
+em.persist(movie);
+
+em.flush();
+em.clear();
+Item item = em.find(Item.class, movie.getId());
+System.out.println("item = " + item);
+
+
+@Id는 데이터베이스 테이블의 PK와 매핑하는 매핑 키 입니다.
+그런데 상속 관계에서는 부모 엔티티에 있는 PK만 테이블과 매핑하면 나머지는 해당 매핑에 맞추어 처리됩니다.
+따라서 자식 테이블에서 임의로 별도의 PK 전략을 가지고 가면 안됩니다.
