@@ -1,14 +1,14 @@
-package hellojpa;
+package hellojpa.domain.item;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+
+@Entity
 @Getter
 @Setter
-@Entity
-public class Book extends Item {
-
+public class Book  extends Item{
     private String author;
     private String isbn;
 }

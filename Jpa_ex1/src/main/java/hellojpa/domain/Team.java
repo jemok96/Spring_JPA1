@@ -1,4 +1,4 @@
-package hellojpa;
+package hellojpa.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,18 +7,19 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
 
 public class Team {
     @Id @GeneratedValue
-    @Column(name="TEAM_ID")
+    @Column(name = "TEAM_ID")
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID")
     private List<Member> members = new ArrayList<>();
 
 

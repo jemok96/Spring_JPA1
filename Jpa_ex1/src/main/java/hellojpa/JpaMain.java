@@ -1,10 +1,17 @@
 package hellojpa;
 
+import hellojpa.domain.Child;
+import hellojpa.domain.Member;
+import hellojpa.domain.Parent;
+import hellojpa.domain.Team;
+import hellojpa.domain.embeddable.Address;
+import hellojpa.domain.item.Item;
+import hellojpa.domain.item.Movie;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
 
 public class JpaMain {
@@ -16,15 +23,9 @@ public class JpaMain {
 
         tx.begin();
         try{
-
             Member member = new Member();
-            member.setUsername("Jemok");
-            em.persist(member);
-
-
-
-            List<Member> resultList = em.createNativeQuery("select * from Member").getResultList();
-            System.out.println("resultList = " + resultList);
+            member.setUsername("JM");
+            member.setAddress(new Address("city","Street","zipcode"));
 
             tx.commit();
 
@@ -38,5 +39,7 @@ public class JpaMain {
 
 
     }
+
+
 }
 
